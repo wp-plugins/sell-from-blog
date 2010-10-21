@@ -3,10 +3,11 @@
 Plugin Name: Sell from Blog
 Plugin URI: http://www.blogworkorange.net/sell-from-blog/
 Description: Lets users sell ebooks, software etc. for premium SMS
-Version: 0.82
+Version: 0.83
 Author: Paweł Pela
 Author URI: http://www.paulpela.com
 License: GPL2
+Text Domain: sell-from-blog
 
 	Copyright 2010  Paweł Pela  (email : paulpela@gmail.com)
 
@@ -29,7 +30,6 @@ License: GPL2
 //	wp_ajax_		- dostępna tylko dla zalogowanych
 //	aby obsługiwać zalogowanych i niezalogowanych należy dodać obie akcje
 
-load_plugin_textdomain('sell-from-blog');
 
 function get_sellfromblog_form($email, $kod) {
 	$audyt_shortcode = '<style type="text/css">
@@ -134,6 +134,8 @@ function sellfromblog_init() {
 
 	wp_enqueue_script('sellfromblog-script', plugin_dir_url( __FILE__ ) . 'sell-from-blog.js', array('prototype'));
 	wp_localize_script('sellfromblog-script', 'wpajax', array('ajaxurl' => admin_url('admin-ajax.php'), 'plugindir' => plugin_dir_url( __FILE__ )));
+	
+	load_plugin_textdomain('sell-from-blog', false, 'sell-from-blog');
 }
 
 

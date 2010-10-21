@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: sell, ebook, premium, sms, paid content
 Requires at least: 3.0
 Tested up to: 3.0.1
-Stable tag: 0.82
+Stable tag: 0.83
 
 Sell from Blog lets you sell your ebook or software package via premium SMS payments.
 
@@ -77,6 +77,9 @@ I will add support for remote validation in future versions. You can help by sen
 2. Configuration menu
 
 == Changelog ==
+
+= 0.83 =
+* Localization ready.
 
 = 0.82 =
 * Localization tweaks.
