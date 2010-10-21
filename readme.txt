@@ -78,8 +78,11 @@ I will add support for remote validation in future versions. You can help by sen
 
 == Changelog ==
 
-= 0.84 =
+= 0.85 =
 * Polish (pl_PL) translation added.
+
+= 0.84 =
+* Polish (pl_PL) translation added (error).
 
 = 0.83 =
 * Localization ready.
@@ -95,7 +98,7 @@ I will add support for remote validation in future versions. You can help by sen
 
 == Upgrade Notice ==
 
-= 0.84 =
+= 0.85 =
 * Polish (pl_PL) translation added.
 
 = 0.81 =

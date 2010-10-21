@@ -3,7 +3,7 @@
 Plugin Name: Sell from Blog
 Plugin URI: http://www.blogworkorange.net/sell-from-blog/
 Description: Lets users sell ebooks, software etc. for premium SMS
-Version: 0.84
+Version: 0.85
 Author: Paweł Pela
 Author URI: http://www.paulpela.com
 License: GPL2
