@@ -4,13 +4,13 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: sell, ebook, premium, sms, paid content
 Requires at least: 3.0
 Tested up to: 3.0.1
-Stable tag: 0.81
+Stable tag: 0.82
 
 Sell from Blog lets you sell your ebook or software package via premium SMS payments.
 
 == Description ==
 
-Opis w jêzyku polskim: http://www.blogworkorange.net/sell-from-blog/
+Opis w jÄ™zyku polskim: http://www.blogworkorange.net/sell-from-blog/
 
 This plugin lets you sell your ebook, software package or anything else small enough to fit into a standard email message (less than 10MiB is safe).
 
@@ -77,6 +77,9 @@ I will add support for remote validation in future versions. You can help by sen
 2. Configuration menu
 
 == Changelog ==
+
+= 0.82 =
+* Localization tweaks.
 
 = 0.81 =
 * Something went wrong with 0.80 ;)
