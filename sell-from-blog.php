@@ -3,7 +3,7 @@
 Plugin Name: Sell from Blog
 Plugin URI: http://www.blogworkorange.net/sell-from-blog/
 Description: Lets users sell ebooks, software etc. for premium SMS
-Version: 0.83
+Version: 0.84
 Author: Paweł Pela
 Author URI: http://www.paulpela.com
 License: GPL2
@@ -41,10 +41,10 @@ function get_sellfromblog_form($email, $kod) {
 	</style>';
 	$audyt_shortcode .= '<div id="sellfromblogdiv">';
 	$audyt_shortcode .= '<table class="sellfromblog">';
-	$audyt_shortcode .= '<tr><td>' . __("Your email") . ':</td><td><input type="text" id="sellfromblog_email" value="' . $email . '" /> *</td></tr>';
-	$audyt_shortcode .= '<tr><td>' . __("Code") . ':</td><td><input type="text" id="sellfromblog_kod" value="' . $kod . '" /> *</td></tr>';
-	$audyt_shortcode .= '<tr><td></td><td>* - ' . __("required") . '</td></tr>';
-	$audyt_shortcode .= '<tr><td></td><td><input type="submit" value="' . __("Send") . '" onclick="sellfromblogForm(wpajax);" /></td></tr>';
+	$audyt_shortcode .= '<tr><td>' . __("Your email", 'sell-from-blog') . ':</td><td><input type="text" id="sellfromblog_email" value="' . $email . '" /> *</td></tr>';
+	$audyt_shortcode .= '<tr><td>' . __("Code", 'sell-from-blog') . ':</td><td><input type="text" id="sellfromblog_kod" value="' . $kod . '" /> *</td></tr>';
+	$audyt_shortcode .= '<tr><td></td><td>* - ' . __("required", 'sell-from-blog') . '</td></tr>';
+	$audyt_shortcode .= '<tr><td></td><td><input type="submit" value="' . __("Send", 'sell-from-blog') . '" onclick="sellfromblogForm(wpajax);" /></td></tr>';
 	$audyt_shortcode .= '</table>';
 	$audyt_shortcode .= '</div>';
 	
@@ -114,12 +114,12 @@ Content-Transfer-Encoding: base64
 		
 	} else if($wpdb->num_rows != 1 && $kod && $email){
 		echo '<div class="sellfromblog_error">';
-		echo "<p><strong>" . __("Error.") . "</strong> " . __("The entered code is incorrect.") . "</p>";
+		echo "<p><strong>" . __("Error.", 'sell-from-blog') . "</strong> " . __("The entered code is incorrect.", 'sell-from-blog') . "</p>";
 		echo "</div>";
 		echo get_sellfromblog_form($email, $kod);
 	} else {
 		echo '<div class="sellfromblog_error">';
-		echo "<p><strong>" . __("Error.") . "</strong> " . __("The form has been filled incorrectly.") . "</p>";
+		echo "<p><strong>" . __("Error.", 'sell-from-blog') . "</strong> " . __("The form has been filled incorrectly.", 'sell-from-blog') . "</p>";
 		echo "</div>";
 		echo get_sellfromblog_form($email, $kod);
 	}
@@ -175,7 +175,7 @@ function sellfromblog_plugin_options() {
 	update_option("sellfromblog_basepath", get_sellfromblog_basepath(__FILE__));
 	
 	if (!current_user_can('manage_options'))  {
-		wp_die( __('You do not have sufficient permissions to access this page.') );
+		wp_die( __('You do not have sufficient permissions to access this page.', 'sell-from-blog') );
 	}
 
 	$hidden_field_name = 'sellfromblog_submit_hidden';
@@ -215,7 +215,7 @@ function sellfromblog_plugin_options() {
 		}
 
 ?>
-<div class="updated"><p><strong><?php _e("Changes have been saved."); ?></strong></p></div>
+<div class="updated"><p><strong><?php _e("Changes have been saved.", 'sell-from-blog'); ?></strong></p></div>
 <?php
 
     }
@@ -244,42 +244,42 @@ function sellfromblog_plugin_options() {
 <form name="form1" method="post" action="">
 <input type="hidden" name="<?php echo $hidden_field_name; ?>" value="Y">
 
-<p><?php echo sprintf(__("Currently there are %d active codes."), $number_of_codes); ?></p>
+<p><?php echo sprintf(__("Currently there are %d active codes.", 'sell-from-blog'), $number_of_codes); ?></p>
 
-<p><?php _e("Active (unused) codes"); ?>: <code><?php echo $active_codes; ?></code></p>
+<p><?php _e("Active (unused) codes", 'sell-from-blog'); ?>: <code><?php echo $active_codes; ?></code></p>
 
-<h3><?php _e("Add new codes"); ?>:</h3>
-<p><?php _e("You can add any number of new codes by separating them with commas like this:"); ?> <code><?php _e("code1,code2,code3,code4"); ?></code>. <?php _e("Remember not to put spaces before or after the commas."); ?></p>
+<h3><?php _e("Add new codes", 'sell-from-blog'); ?>:</h3>
+<p><?php _e("You can add any number of new codes by separating them with commas like this:", 'sell-from-blog'); ?> <code><?php _e("code1,code2,code3,code4", 'sell-from-blog'); ?></code>. <?php _e("Remember not to put spaces before or after the commas.", 'sell-from-blog'); ?></p>
 <p>
 	<textarea name="<?php echo $data_field1_name; ?>" rows="6" cols="75"><?php echo $opt1_val; ?></textarea>
 </p>
 
-<h3><?php _e("File to be sent"); ?>:</h3>
-<p><?php _e("Enter the path relative to the base directory of your WordPress installation."); ?></p>
+<h3><?php _e("File to be sent", 'sell-from-blog'); ?>:</h3>
+<p><?php _e("Enter the path relative to the base directory of your WordPress installation.", 'sell-from-blog'); ?></p>
 <p>
 	<code><?php echo get_option("sellfromblog_basepath"); ?></code> <input style="width: 300px;" class="regular-text code" name="<?php echo $data_field2_name; ?>" value="<?php echo $opt2_val; ?>" />
 </p>
 
-<h3><?php _e("Confirmation message"); ?>:</h3>
-<p><?php _e("This message will be displayed on the blog after the form has been correctly sent."); ?></p>
+<h3><?php _e("Confirmation message", 'sell-from-blog'); ?>:</h3>
+<p><?php _e("This message will be displayed on the blog after the form has been correctly sent.", 'sell-from-blog'); ?></p>
 <p>
 	<textarea name="<?php echo $data_field3_name; ?>" rows="6" cols="75"><?php echo $opt3_val; ?></textarea>
 </p>
 
-<h3><?php _e("Email subject"); ?>:</h3>
-<p><?php _e("Subject of the email that will be sent to the buyer."); ?></p>
+<h3><?php _e("Email subject", 'sell-from-blog'); ?>:</h3>
+<p><?php _e("Subject of the email that will be sent to the buyer.", 'sell-from-blog'); ?></p>
 <p>
 	<input style="width: 400px;" class="regular-text" name="<?php echo $data_field5_name; ?>" value="<?php echo $opt5_val; ?>" />
 </p>
 
-<h3><?php _e("Email body"); ?>:</h3>
-<p><?php _e("Body of the message that will be sent to the buyer. <strong>Plain text only!</strong>"); ?></p>
+<h3><?php _e("Email body", 'sell-from-blog'); ?>:</h3>
+<p><?php _e("Body of the message that will be sent to the buyer. <strong>Plain text only!</strong>", 'sell-from-blog'); ?></p>
 <p>
 	<textarea name="<?php echo $data_field4_name; ?>" rows="6" cols="75"><?php echo $opt4_val; ?></textarea>
 </p>
 
 <p class="submit">
-<input type="submit" name="Submit" class="button-primary" value="<?php _e("Save"); ?>" />
+<input type="submit" name="Submit" class="button-primary" value="<?php _e("Save", 'sell-from-blog'); ?>" />
 </p>
 
 </form>
