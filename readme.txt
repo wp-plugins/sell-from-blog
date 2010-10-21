@@ -1,10 +1,10 @@
-=== Plugin Name ===
+=== Sell from Blog ===
 Contributors: paulpela
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XC8GDD4EMJK98
-Tags: sell, ebook, premium, sms, paid content
+Tags: sell, ebook, premium, sms, paid content, payments
 Requires at least: 3.0
 Tested up to: 3.0.1
-Stable tag: 0.84
+Stable tag: 0.86
 
 Sell from Blog lets you sell your ebook or software package via premium SMS payments.
 
@@ -71,6 +71,15 @@ Yes, you can add your own custom (promotional) codes.
 
 I will add support for remote validation in future versions. You can help by sending me links to technical data of your service provider.
 
+= Which languages are supported? =
+
+Currently:
+
+* English
+* Polish (pl_PL)
+
+This plugin is gettext-ready. You can easily translate it into your language.
+
 == Screenshots ==
 
 1. The form
@@ -78,8 +87,11 @@ I will add support for remote validation in future versions. You can help by sen
 
 == Changelog ==
 
-= 0.85 =
+= 0.86 =
 * Polish (pl_PL) translation added.
+
+= 0.85 =
+* Polish (pl_PL) translation added (error again).
 
 = 0.84 =
 * Polish (pl_PL) translation added (error).
@@ -98,7 +110,7 @@ I will add support for remote validation in future versions. You can help by sen
 
 == Upgrade Notice ==
 
-= 0.85 =
+= 0.86 =
 * Polish (pl_PL) translation added.
 
 = 0.81 =
