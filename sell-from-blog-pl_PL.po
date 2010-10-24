@@ -1,14 +1,14 @@
-# Translation of the WordPress plugin Sell from Blog 0.83 by Paweł Pela.
+# Translation of the WordPress plugin Sell from Blog 0.87 by Paweł Pela.
 # Copyright (C) 2010 Paweł Pela
 # This file is distributed under the same license as the Sell from Blog package.
 # Paul Pela <paulpela@gmail.com>, 2010.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Sell from Blog 0.83\n"
+"Project-Id-Version: Sell from Blog 0.87\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/sell-from-blog\n"
-"POT-Creation-Date: 2010-10-21 13:41+0000\n"
-"PO-Revision-Date: 2010-10-21 16:03+0100\n"
+"POT-Creation-Date: 2010-10-24 12:05+0000\n"
+"PO-Revision-Date: 2010-10-24 14:15+0100\n"
 "Last-Translator: Paul Pela <paulpela@gmail.com>\n"
 "Language-Team: pl_PL <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -20,6 +20,7 @@ msgid "Your email"
 msgstr "Twój email"
 
 #: sell-from-blog.php:45
+#: sell-from-blog.php:376
 msgid "Code"
 msgstr "Kod"
 
@@ -28,90 +29,154 @@ msgid "required"
 msgstr "wymagane"
 
 #: sell-from-blog.php:47
-msgid "Send"
-msgstr "Wyślij"
+msgid "Send it to me"
+msgstr "Wyślij mi"
 
-#: sell-from-blog.php:117
-#: sell-from-blog.php:122
+#: sell-from-blog.php:55
+msgid "New sale has been registered on"
+msgstr "Nowa sprzedaż została zarejestrowana na"
+
+#: sell-from-blog.php:56
+msgid "Date:"
+msgstr "Data:"
+
+#: sell-from-blog.php:57
+msgid "Email:"
+msgstr "Email:"
+
+#: sell-from-blog.php:58
+msgid "Code:"
+msgstr "Kod:"
+
+#: sell-from-blog.php:60
+msgid "IP:"
+msgstr "IP:"
+
+#: sell-from-blog.php:60
+msgid "resolves as"
+msgstr "czyli"
+
+#: sell-from-blog.php:129
+msgid "New sale on"
+msgstr "Nowa sprzedaż na"
+
+#: sell-from-blog.php:134
+#: sell-from-blog.php:139
 msgid "Error."
 msgstr "Błąd."
 
-#: sell-from-blog.php:117
+#: sell-from-blog.php:134
 msgid "The entered code is incorrect."
 msgstr "Podany kod jest nieprawidłowy."
 
-#: sell-from-blog.php:122
+#: sell-from-blog.php:139
 msgid "The form has been filled incorrectly."
 msgstr "Formularz został nieprawidłowo wypełniony."
 
-#: sell-from-blog.php:178
+#: sell-from-blog.php:195
 msgid "You do not have sufficient permissions to access this page."
 msgstr "Nie masz wystarczających uprawnień, aby oglądać tą stronę."
 
-#: sell-from-blog.php:218
+#: sell-from-blog.php:238
 msgid "Changes have been saved."
 msgstr "Zmiany zostały zapisane."
 
-#: sell-from-blog.php:247
+#: sell-from-blog.php:268
 #, php-format
 msgid "Currently there are %d active codes."
 msgstr "Aktualnie %d kody są aktywne."
 
-#: sell-from-blog.php:249
+#: sell-from-blog.php:270
 msgid "Active (unused) codes"
 msgstr "Aktywne (niewykorzystane) kody"
 
-#: sell-from-blog.php:251
+#: sell-from-blog.php:272
 msgid "Add new codes"
 msgstr "Dodaj nowe kody"
 
-#: sell-from-blog.php:252
+#: sell-from-blog.php:273
 msgid "You can add any number of new codes by separating them with commas like this:"
 msgstr "Możesz dodać dowolną ilość nowych kodów, przedzielając je przecinkami w ten sposób:"
 
-#: sell-from-blog.php:252
+#: sell-from-blog.php:273
 msgid "code1,code2,code3,code4"
 msgstr "kod1,kod2,kod3,kod4"
 
-#: sell-from-blog.php:252
+#: sell-from-blog.php:273
 msgid "Remember not to put spaces before or after the commas."
 msgstr "Pamiętaj, by nie umieszczać spacji przed lub po przecinkach."
 
-#: sell-from-blog.php:257
+#: sell-from-blog.php:278
 msgid "File to be sent"
 msgstr "Plik do wysłania"
 
-#: sell-from-blog.php:258
+#: sell-from-blog.php:279
 msgid "Enter the path relative to the base directory of your WordPress installation."
 msgstr "Wpisz ścieżkę do pliku względem katalogu głównego twojej instalacji WordPress."
 
-#: sell-from-blog.php:263
+#: sell-from-blog.php:284
 msgid "Confirmation message"
 msgstr "Wiadomość potwierdzająca"
 
-#: sell-from-blog.php:264
+#: sell-from-blog.php:285
 msgid "This message will be displayed on the blog after the form has been correctly sent."
 msgstr "Ta wiadomość zostanie wyświetlona na blogu po poprawnym wypełnieniu formularza."
 
-#: sell-from-blog.php:269
+#: sell-from-blog.php:290
 msgid "Email subject"
 msgstr "Tytuł emaila"
 
-#: sell-from-blog.php:270
+#: sell-from-blog.php:291
 msgid "Subject of the email that will be sent to the buyer."
 msgstr "Tytuł wiadomości, która zostanie wysłana do kupującego."
 
-#: sell-from-blog.php:275
+#: sell-from-blog.php:296
 msgid "Email body"
 msgstr "Treść emaila"
 
-#: sell-from-blog.php:276
+#: sell-from-blog.php:297
 msgid "Body of the message that will be sent to the buyer. <strong>Plain text only!</strong>"
 msgstr "Treść emaila z plikiem. <strong>Tylko czysty tekst, bez HTML!</strong>"
 
-#: sell-from-blog.php:282
+#: sell-from-blog.php:302
+msgid "Notify Admin"
+msgstr "Powiadom Administratora"
+
+#: sell-from-blog.php:303
+msgid "Check if you want the admin to also receive a notification about each transaction."
+msgstr "Zaznacz to pole, jeśli chcesz, aby administrator otrzymywał na maila powiadomienie o każdej transakcji."
+
+#: sell-from-blog.php:308
+msgid "Notify admin:"
+msgstr "Powiadom Administratora:"
+
+#: sell-from-blog.php:312
 msgid "Save"
 msgstr "Zapisz"
+
+#: sell-from-blog.php:348
+msgid "Stats"
+msgstr "Statystyki"
+
+#: sell-from-blog.php:359
+msgid "Number of active (unused codes)"
+msgstr "Liczba aktywnych (niewykorzystanych) kodów"
+
+#: sell-from-blog.php:363
+msgid "Recent Sales"
+msgstr "Najnowsze Transakcje"
+
+#: sell-from-blog.php:375
+msgid "Date"
+msgstr "Data"
+
+#: sell-from-blog.php:377
+msgid "Email"
+msgstr "Email"
+
+#: sell-from-blog.php:378
+msgid "IP"
+msgstr "IP"
 
 #. Plugin Name of the plugin/theme
 msgid "Sell from Blog"
