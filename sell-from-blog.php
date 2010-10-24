@@ -3,7 +3,7 @@
 Plugin Name: Sell from Blog
 Plugin URI: http://www.blogworkorange.net/sell-from-blog/
 Description: Lets users sell ebooks, software etc. for premium SMS
-Version: 0.87
+Version: 0.88
 Author: Paweł Pela
 Author URI: http://www.paulpela.com
 License: GPL2
@@ -26,8 +26,10 @@ Text Domain: sell-from-blog
 */
 
 /* TODO
-- dashboard widget that shows how many codes you have left and last 25 transactions
 - mobilepay.pl remote validation integration
+- link to "add new codes" in the dashboard widget
+- dashboard widget: localize dates
+- customize number of last transactions displayed in the dashboard
 */
 
 
@@ -343,6 +345,7 @@ function sellfromblog_activation() {
 }
 
 register_activation_hook(__FILE__, "sellfromblog_activation");
+add_action("update_plugin_complete_actions", "sellfromblog_activation");
 
 function sellfromblog_add_dashboard() {
 	wp_add_dashboard_widget("sellfromblog", "Sell from Blog - " . __("Stats", "sell-from-blog"), "sellfromblog_dashboard", null);

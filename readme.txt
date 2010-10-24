@@ -89,6 +89,10 @@ This plugin is gettext-ready. You can easily translate it into your language.
 
 == Changelog ==
 
+= 0.88 =
+* Maintenance release
+* Previous version did not upgrade the database automatically
+
 = 0.87 =
 * Sends notification to admin after each transaction (can be turned off)
 * Additional data is saved to the database after each transaction (code, email, date, IP)
@@ -116,6 +120,9 @@ This plugin is gettext-ready. You can easily translate it into your language.
 * First public release.
 
 == Upgrade Notice ==
+
+= 0.88 =
+* For some reason previous version did not upgrade the database correctly
 
 = 0.87 =
 * New features: admin notification, dashboard widget with statistics
