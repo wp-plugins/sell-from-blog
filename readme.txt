@@ -87,6 +87,11 @@ This plugin is gettext-ready. You can easily translate it into your language.
 
 == Changelog ==
 
+= 0.87 =
+* Sends notification to admin after each transaction (can be turned off)
+* Additional data is saved to the database after each transaction (code, email, date, IP)
+* A Dashboard widget shows you how many codes you have left and last 25 transactions
+
 = 0.86 =
 * Polish (pl_PL) translation added.
 
@@ -109,6 +114,9 @@ This plugin is gettext-ready. You can easily translate it into your language.
 * First public release.
 
 == Upgrade Notice ==
+
+= 0.87 =
+* New features: admin notification, dashboard widget with statistics
 
 = 0.86 =
 * Polish (pl_PL) translation added.

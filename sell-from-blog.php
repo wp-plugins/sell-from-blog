@@ -3,7 +3,7 @@
 Plugin Name: Sell from Blog
 Plugin URI: http://www.blogworkorange.net/sell-from-blog/
 Description: Lets users sell ebooks, software etc. for premium SMS
-Version: 0.86
+Version: 0.87
 Author: Paweł Pela
 Author URI: http://www.paulpela.com
 License: GPL2
@@ -25,10 +25,10 @@ Text Domain: sell-from-blog
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-//	objaśnienie akcji:
-//	wp_ajax_nopriv_ - dostępna tylko dla niezalogowanych użytkowników
-//	wp_ajax_		- dostępna tylko dla zalogowanych
-//	aby obsługiwać zalogowanych i niezalogowanych należy dodać obie akcje
+/* TODO
+- dashboard widget that shows how many codes you have left and last 25 transactions
+- mobilepay.pl remote validation integration
+*/
 
 
 function get_sellfromblog_form($email, $kod) {
@@ -44,11 +44,22 @@ function get_sellfromblog_form($email, $kod) {
 	$audyt_shortcode .= '<tr><td>' . __("Your email", 'sell-from-blog') . ':</td><td><input type="text" id="sellfromblog_email" value="' . $email . '" /> *</td></tr>';
 	$audyt_shortcode .= '<tr><td>' . __("Code", 'sell-from-blog') . ':</td><td><input type="text" id="sellfromblog_kod" value="' . $kod . '" /> *</td></tr>';
 	$audyt_shortcode .= '<tr><td></td><td>* - ' . __("required", 'sell-from-blog') . '</td></tr>';
-	$audyt_shortcode .= '<tr><td></td><td><input type="submit" value="' . __("Send", 'sell-from-blog') . '" onclick="sellfromblogForm(wpajax);" /></td></tr>';
+	$audyt_shortcode .= '<tr><td></td><td><input type="submit" value="' . __("Send it to me", 'sell-from-blog') . '" onclick="sellfromblogForm(wpajax);" /></td></tr>';
 	$audyt_shortcode .= '</table>';
 	$audyt_shortcode .= '</div>';
 	
 	return $audyt_shortcode;
+}
+
+function get_sellfromblog_adminmessage($email, $code) {
+	$message = __("New sale has been registered on", "sell-from-blog") . " " . get_bloginfo("name") . "\n\n";
+	$message .= __("Date:", "sell-from-blog") . " " . date('r') . "\n";
+	$message .= __("Email:", "sell-from-blog") . " " . $email . "\n";
+	$message .= __("Code:", "sell-from-blog") . " " . $code . "\n";
+	$host = $_SERVER['REMOTE_HOST'] ? $_SERVER['REMOTE_HOST'] : $_SERVER['REMOTE_ADDR'];
+	$message .= __("IP:", "sell-from-blog") . " " . $_SERVER['REMOTE_ADDR'] . " (" . __("resolves as", "sell-from-blog") . ": " . $host . ")\n";
+	
+	return $message;
 }
 
 add_action( 'wp_ajax_nopriv_sellfromblog', 'sellfromblog_form' );
@@ -72,7 +83,7 @@ function sellfromblog_form() {
 	$result = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "sellfromblog_codes WHERE active = 1 AND Code = %s", $kod));
 	
 	if($wpdb->num_rows == 1 && $kod && $email) {
-		$wpdb->update($wpdb->prefix . "sellfromblog_codes", array("active" => "0"), array("id" => $result->id));
+		$wpdb->update($wpdb->prefix . "sellfromblog_codes", array("active" => "0", "IP" => $_SERVER['REMOTE_ADDR'], "email" => mysql_real_escape_string($email), "transaction_date" => time()), array("id" => $result->id));
 		
 		$random_hash = md5(date('r', time())); 
 		$admin_info = get_userdata(1);
@@ -111,6 +122,12 @@ Content-Transfer-Encoding: base64
 		$subject = get_option("sellfromblog_email_subject");
 		
 		@mail($email, $subject, $message, $headers);
+		
+		if(get_option("sellfromblog_adminmessage") == "on") {
+			$adminmessage = get_sellfromblog_adminmessage($email, $kod);
+			$adminheaders = "From: Sell from Blog <" . $admin_info->user_email . ">\n";
+			@mail($admin_info->user_email, "[Sell from Blog] " . __("New sale on", "sell-from-blog") . " " . get_bloginfo("name"), $adminmessage, $adminheaders);
+		}
 		
 	} else if($wpdb->num_rows != 1 && $kod && $email){
 		echo '<div class="sellfromblog_error">';
@@ -184,6 +201,7 @@ function sellfromblog_plugin_options() {
     $data_field3_name = 'sellfromblog_confirmation_msg';
     $data_field4_name = 'sellfromblog_email_body';
     $data_field5_name = 'sellfromblog_email_subject';
+    $data_field6_name = 'sellfromblog_adminmessage';
   
 
 	if( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
@@ -213,6 +231,8 @@ function sellfromblog_plugin_options() {
 		if($_POST[$data_field5_name]) {
 			update_option($data_field5_name, $_POST[$data_field5_name]);
 		}
+		
+		update_option($data_field6_name, $_POST[$data_field6_name]);
 
 ?>
 <div class="updated"><p><strong><?php _e("Changes have been saved.", 'sell-from-blog'); ?></strong></p></div>
@@ -224,6 +244,7 @@ function sellfromblog_plugin_options() {
 	$opt3_val = get_option($data_field3_name);
 	$opt4_val = get_option($data_field4_name);
 	$opt5_val = get_option($data_field5_name);
+	$opt6_val = get_option($data_field6_name);
 		
 	$all_codes = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "sellfromblog_codes WHERE active = 1", ARRAY_A);
 	$number_of_codes = $wpdb->num_rows;
@@ -278,6 +299,15 @@ function sellfromblog_plugin_options() {
 	<textarea name="<?php echo $data_field4_name; ?>" rows="6" cols="75"><?php echo $opt4_val; ?></textarea>
 </p>
 
+<h3><?php _e("Notify Admin", 'sell-from-blog'); ?>:</h3>
+<p><?php _e("Check if you want the admin to also receive a notification about each transaction.", 'sell-from-blog'); ?></p>
+<p>
+<?php 
+	$opt6_val ? $checked = true : $checked = false;
+?>
+	<?php _e("Notify admin:", 'sell-from-blog'); ?> <input type="checkbox" name="<?php echo $data_field6_name; ?>" <?php if($checked) echo 'checked="checked"'; ?>></textarea>
+</p>
+
 <p class="submit">
 <input type="submit" name="Submit" class="button-primary" value="<?php _e("Save", 'sell-from-blog'); ?>" />
 </p>
@@ -297,14 +327,68 @@ function sellfromblog_activation() {
 	  id mediumint(9) NOT NULL AUTO_INCREMENT,
 	  Code varchar(32) DEFAULT '0' NOT NULL,
 	  active tinyint(4) DEFAULT '1' NOT NULL,
+	  IP varchar(128) NULL,
+	  email varchar(128) NULL,
+	  transaction_date int(64) NULL,
 	  UNIQUE KEY id (id)
 	);";
 	
-	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
-		$wpdb->query($sql);
-	}
+	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+	dbDelta($sql);
+
+
+	//if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+	//	$wpdb->query($sql);
+	//}
 }
 
 register_activation_hook(__FILE__, "sellfromblog_activation");
+
+function sellfromblog_add_dashboard() {
+	wp_add_dashboard_widget("sellfromblog", "Sell from Blog - " . __("Stats", "sell-from-blog"), "sellfromblog_dashboard", null);
+}
+
+add_action("wp_dashboard_setup", "sellfromblog_add_dashboard");
+
+function sellfromblog_dashboard() {
+	global $wpdb;
+	
+	$all_codes = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "sellfromblog_codes WHERE active = 1", ARRAY_A);
+	$number_of_codes = $wpdb->num_rows;
+	
+	echo "<p>" . __("Number of active (unused codes)", "sell-from-blog") . ": $number_of_codes</p>";
+	
+	$last_transactions = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "sellfromblog_codes WHERE transaction_date IS NOT NULL LIMIT 0, 25", ARRAY_A);
+	
+	echo "<h4>" . __("Recent Sales", "sell-from-blog") . "</h4>";
+	//var_dump($last_transactions);
+	
+	?>
+	<style type="text/css">
+		.sellfromblog_table th { font-weight: bold; }
+		.sellfromblog_table { border-collapse: collapse; }
+		.sellfromblog_table td, .sellfromblog_table th { border: 1px solid #ddd; padding: 4px;}
+	</style>
+	<?php
+	echo '<table class="sellfromblog_table">';
+	echo "<tr>";
+	echo "<th>". __("Date", "sell-from-blog") . "</td>";
+	echo "<th>". __("Code", "sell-from-blog") . "</td>";
+	echo "<th>". __("Email", "sell-from-blog") . "</td>";
+	echo "<th>". __("IP", "sell-from-blog") . "</td>";
+	echo "</tr>";
+	
+	
+	foreach($last_transactions as $transaction) {
+		echo "<tr>";
+		echo "<td>". date('r', $transaction['transaction_date']) . "</td>";
+		echo "<td>". $transaction['Code'] . "</td>";
+		echo "<td>". $transaction['email'] . "</td>";
+		echo "<td>". $transaction['IP'] . "</td>";
+		echo "</tr>";
+	}
+	
+	echo "</table>";
+}
 
 ?>
