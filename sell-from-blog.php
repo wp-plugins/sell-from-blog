@@ -46,7 +46,7 @@ function get_sellfromblog_form($email, $kod) {
 	$audyt_shortcode .= '<tr><td>' . __("Your email", 'sell-from-blog') . ':</td><td><input type="text" id="sellfromblog_email" value="' . $email . '" /> *</td></tr>';
 	$audyt_shortcode .= '<tr><td>' . __("Code", 'sell-from-blog') . ':</td><td><input type="text" id="sellfromblog_kod" value="' . $kod . '" /> *</td></tr>';
 	$audyt_shortcode .= '<tr><td></td><td>* - ' . __("required", 'sell-from-blog') . '</td></tr>';
-	$audyt_shortcode .= '<tr><td></td><td><input type="submit" value="' . __("Do it", 'sell-from-blog') . '" onclick="sellfromblogForm(wpajax);" /></td></tr>';
+	$audyt_shortcode .= '<tr><td></td><td><input type="submit" value="' . __("Send it to me", 'sell-from-blog') . '" onclick="sellfromblogForm(wpajax);" /></td></tr>';
 	$audyt_shortcode .= '</table>';
 	$audyt_shortcode .= '</div>';
 	
