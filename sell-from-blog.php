@@ -3,7 +3,7 @@
 Plugin Name: Sell from Blog
 Plugin URI: http://www.blogworkorange.net/sell-from-blog/
 Description: Lets users sell ebooks, software etc. for premium SMS
-Version: 0.88
+Version: 0.89
 Author: Paweł Pela
 Author URI: http://www.paulpela.com
 License: GPL2
@@ -361,7 +361,7 @@ function sellfromblog_dashboard() {
 	
 	echo "<p>" . __("Number of active (unused codes)", "sell-from-blog") . ": $number_of_codes</p>";
 	
-	$last_transactions = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "sellfromblog_codes WHERE transaction_date IS NOT NULL LIMIT 0, 25", ARRAY_A);
+	$last_transactions = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "sellfromblog_codes WHERE transaction_date IS NOT NULL ORDER BY transaction_date DESC LIMIT 0, 25", ARRAY_A);
 	
 	echo "<h4>" . __("Recent Sales", "sell-from-blog") . "</h4>";
 	//var_dump($last_transactions);
