@@ -89,6 +89,10 @@ This plugin is gettext-ready. You can easily translate it into your language.
 
 == Changelog ==
 
+= 0.89 =
+* You can now ask people to let you use their email address in marketing purposes
+* If you run out of codes the form will temporarily shut down until you replenish them
+
 = 0.88 =
 * Maintenance release
 * Previous version did not upgrade the database automatically
@@ -120,6 +124,9 @@ This plugin is gettext-ready. You can easily translate it into your language.
 * First public release.
 
 == Upgrade Notice ==
+
+= 0.89 =
+* Form shuts down if you run out of codes. You can ask buyers for permission to use their email for marketing
 
 = 0.88 =
 * For some reason previous version did not upgrade the database correctly

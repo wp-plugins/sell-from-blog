@@ -28,38 +28,62 @@ Text Domain: sell-from-blog
 /* TODO
 - mobilepay.pl remote validation integration
 - link to "add new codes" in the dashboard widget
-- dashboard widget: localize dates
 - customize number of last transactions displayed in the dashboard
 */
 
 
-function get_sellfromblog_form($email, $kod) {
-	$audyt_shortcode = '<style type="text/css">
-	.sellfromblog td { padding: 16px 4px; border: none; }
-	.sellfromblog tr { border: none; } 
-	.sellfromblog input { width: 240px; padding: 4px;}
-	.sellfromblog input[type="submit"] { width: 240px; padding: 4px; background: #DE7008; color: #fff; border: none; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; cursor: pointer;}
-	.sellfromblog_error { width: 90%; margin: 6px auto; border: 1px solid #a00000; padding: 6px;}
-	</style>';
-	$audyt_shortcode .= '<div id="sellfromblogdiv">';
-	$audyt_shortcode .= '<table class="sellfromblog">';
-	$audyt_shortcode .= '<tr><td>' . __("Your email", 'sell-from-blog') . ':</td><td><input type="text" id="sellfromblog_email" value="' . $email . '" /> *</td></tr>';
-	$audyt_shortcode .= '<tr><td>' . __("Code", 'sell-from-blog') . ':</td><td><input type="text" id="sellfromblog_kod" value="' . $kod . '" /> *</td></tr>';
-	$audyt_shortcode .= '<tr><td></td><td>* - ' . __("required", 'sell-from-blog') . '</td></tr>';
-	$audyt_shortcode .= '<tr><td></td><td><input type="submit" value="' . __("Send it to me", 'sell-from-blog') . '" onclick="sellfromblogForm(wpajax);" /></td></tr>';
-	$audyt_shortcode .= '</table>';
-	$audyt_shortcode .= '</div>';
+function get_sellfromblog_form($email, $kod, $agree = "on") {
+	global $wpdb;
+	$wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "sellfromblog_codes WHERE active = 1");
+	$number_of_codes = $wpdb->num_rows;
+	if($number_of_codes > 0) {
+		$sellfromblog_shortcode = '<style type="text/css">
+		.sellfromblog td { padding: 16px 4px; border: none; }
+		.sellfromblog tr { border: none; } 
+		.sellfromblog input { width: 240px; padding: 4px;}
+		.sellfromblog input[type="submit"] { width: 240px; padding: 4px; background: #DE7008; color: #fff; border: none; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; cursor: pointer;}
+		.sellfromblog input[type="checkbox"] { padding: 4px; width: 20px;}
+		.sellfromblog_error { width: 90%; margin: 6px auto; border: 1px solid #a00000; padding: 6px;}
+		</style>';
+		$sellfromblog_shortcode .= '<div id="sellfromblogdiv">';
+		$sellfromblog_shortcode .= '<table class="sellfromblog">';
+		$sellfromblog_shortcode .= '<tr><td>' . __("Your email", 'sell-from-blog') . ':</td><td><input type="text" id="sellfromblog_email" value="' . $email . '" /> *</td></tr>';
+		$sellfromblog_shortcode .= '<tr><td>' . __("Code", 'sell-from-blog') . ':</td><td><input type="text" id="sellfromblog_kod" value="' . $kod . '" /> *</td></tr>';
+		
+		if($agree == "on" && get_option("sellfromblog_agree_ask") == "on") {
+			$sellfromblog_shortcode .= '<tr><td colspan="2"><input type="checkbox" checked="checked" id="sellfromblog_agree" /> ' . __("I want to receive more info related to this website to my email address.", "sell-from-blog") . '</td></tr>';
+		} else if (get_option("sellfromblog_agree_ask") == "on" && $agree != "on") {
+			$sellfromblog_shortcode .= '<tr><td colspan="2"><input type="checkbox" id="sellfromblog_agree" /> ' . __("I want to receive more info related to this website to my email address.", "sell-from-blog") . '</td></tr>';
+		}
+		
+		$sellfromblog_shortcode .= '<tr><td></td><td>* - ' . __("required", 'sell-from-blog') . '</td></tr>';
+		$sellfromblog_shortcode .= '<tr><td></td><td><input type="submit" value="' . __("Send it to me", 'sell-from-blog') . '" onclick="sellfromblogForm(wpajax);" /></td></tr>';
+		$sellfromblog_shortcode .= '</table>';
+		$sellfromblog_shortcode .= '</div>';
+	} else {
+		$sellfromblog_shortcode .= __('<p><strong style="color: #ff0000;">' . __("Unfortunately, the sales form has been temporarily disabled due to a shortage of codes in the database. The admin should replenish it shortly and the form will be available again.", "sell-from-blog") . '</strong></p>', "sell-from-blog");
+	}
 	
-	return $audyt_shortcode;
+	return $sellfromblog_shortcode;
 }
 
-function get_sellfromblog_adminmessage($email, $code) {
+function get_sellfromblog_adminmessage($email, $code, $agree) {
+	global $wpdb;
+	$wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "sellfromblog_codes WHERE active = 1");
+	$number_of_codes = $wpdb->num_rows;
+	
 	$message = __("New sale has been registered on", "sell-from-blog") . " " . get_bloginfo("name") . "\n\n";
 	$message .= __("Date:", "sell-from-blog") . " " . date('r') . "\n";
 	$message .= __("Email:", "sell-from-blog") . " " . $email . "\n";
 	$message .= __("Code:", "sell-from-blog") . " " . $code . "\n";
+	if($agree == "on" && get_option("sellfromblog_agree_ask") == "on") {
+		$message .= __("Marketing agreement:", "sell-from-blog") . " " . __("yes", "sell-from-blog") . "\n";
+	} else if (get_option("sellfromblog_agree_ask") == "on") {
+		$message .= __("Marketing agreement:", "sell-from-blog") . " " . __("no", "sell-from-blog") . "\n";
+	}
 	$host = $_SERVER['REMOTE_HOST'] ? $_SERVER['REMOTE_HOST'] : $_SERVER['REMOTE_ADDR'];
 	$message .= __("IP:", "sell-from-blog") . " " . $_SERVER['REMOTE_ADDR'] . " (" . __("resolves as", "sell-from-blog") . ": " . $host . ")\n";
+	$message .= __("Codes left:", "sell-from-blog") . " " . $number_of_codes . "\n";
 	
 	return $message;
 }
@@ -68,24 +92,23 @@ add_action( 'wp_ajax_nopriv_sellfromblog', 'sellfromblog_form' );
 add_action( 'wp_ajax_sellfromblog', 'sellfromblog_form' );
 add_action( 'init', 'sellfromblog_init' );
 
-// dodajemy shordcode (należy go wpisać w treści wpisu w formie [ajax-shortcode]
 add_shortcode('sell-from-blog', 'sellfromblog_shortcode');
 
 
-// ta funkcja będzie wywoływana pry pomocy Ajax
 function sellfromblog_form() {
 
 	global $wpdb;
 	
 	$kod = $_GET['kod'];
 	$email = $_GET['email'];
+	$agree = $_GET['agree'];
 	
 	$confirmation_msg = get_option("sellfromblog_confirmation_msg");
 	
 	$result = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "sellfromblog_codes WHERE active = 1 AND Code = %s", $kod));
 	
 	if($wpdb->num_rows == 1 && $kod && $email) {
-		$wpdb->update($wpdb->prefix . "sellfromblog_codes", array("active" => "0", "IP" => $_SERVER['REMOTE_ADDR'], "email" => mysql_real_escape_string($email), "transaction_date" => time()), array("id" => $result->id));
+		$wpdb->update($wpdb->prefix . "sellfromblog_codes", array("active" => "0", "IP" => $_SERVER['REMOTE_ADDR'], "email" => mysql_real_escape_string($email), "transaction_date" => time(), "agree" => mysql_real_escape_string($agree)), array("id" => $result->id));
 		
 		$random_hash = md5(date('r', time())); 
 		$admin_info = get_userdata(1);
@@ -126,7 +149,7 @@ Content-Transfer-Encoding: base64
 		@mail($email, $subject, $message, $headers);
 		
 		if(get_option("sellfromblog_adminmessage") == "on") {
-			$adminmessage = get_sellfromblog_adminmessage($email, $kod);
+			$adminmessage = get_sellfromblog_adminmessage($email, $kod, $agree);
 			$adminheaders = "From: Sell from Blog <" . $admin_info->user_email . ">\n";
 			@mail($admin_info->user_email, "[Sell from Blog] " . __("New sale on", "sell-from-blog") . " " . get_bloginfo("name"), $adminmessage, $adminheaders);
 		}
@@ -135,12 +158,12 @@ Content-Transfer-Encoding: base64
 		echo '<div class="sellfromblog_error">';
 		echo "<p><strong>" . __("Error.", 'sell-from-blog') . "</strong> " . __("The entered code is incorrect.", 'sell-from-blog') . "</p>";
 		echo "</div>";
-		echo get_sellfromblog_form($email, $kod);
+		echo get_sellfromblog_form($email, $kod, $agree);
 	} else {
 		echo '<div class="sellfromblog_error">';
 		echo "<p><strong>" . __("Error.", 'sell-from-blog') . "</strong> " . __("The form has been filled incorrectly.", 'sell-from-blog') . "</p>";
 		echo "</div>";
-		echo get_sellfromblog_form($email, $kod);
+		echo get_sellfromblog_form($email, $kod, $agree);
 	}
 	
 	exit; // Bardzo ważne!
@@ -158,7 +181,6 @@ function sellfromblog_init() {
 }
 
 
-// funkcja obsługująca shortcode
 function sellfromblog_shortcode() {
 
 	$sc = '<style type="text\css">.sellfromblog_wait { width: 32px; margin 50px auto; }</style>';
@@ -204,6 +226,7 @@ function sellfromblog_plugin_options() {
     $data_field4_name = 'sellfromblog_email_body';
     $data_field5_name = 'sellfromblog_email_subject';
     $data_field6_name = 'sellfromblog_adminmessage';
+    $data_field7_name = 'sellfromblog_agree_ask';
   
 
 	if( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
@@ -235,6 +258,7 @@ function sellfromblog_plugin_options() {
 		}
 		
 		update_option($data_field6_name, $_POST[$data_field6_name]);
+		update_option($data_field7_name, $_POST[$data_field7_name]);
 
 ?>
 <div class="updated"><p><strong><?php _e("Changes have been saved.", 'sell-from-blog'); ?></strong></p></div>
@@ -247,6 +271,7 @@ function sellfromblog_plugin_options() {
 	$opt4_val = get_option($data_field4_name);
 	$opt5_val = get_option($data_field5_name);
 	$opt6_val = get_option($data_field6_name);
+	$opt7_val = get_option($data_field7_name);
 		
 	$all_codes = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "sellfromblog_codes WHERE active = 1", ARRAY_A);
 	$number_of_codes = $wpdb->num_rows;
@@ -310,6 +335,15 @@ function sellfromblog_plugin_options() {
 	<?php _e("Notify admin:", 'sell-from-blog'); ?> <input type="checkbox" name="<?php echo $data_field6_name; ?>" <?php if($checked) echo 'checked="checked"'; ?>></textarea>
 </p>
 
+<h3><?php _e("Ask for permission to send more info", 'sell-from-blog'); ?>:</h3>
+<p><?php _e("Chcek if you want to ask users to let you send them info related to the purchase and the content of you blog.", 'sell-from-blog'); ?></p>
+<p>
+<?php 
+	$opt7_val ? $checked = true : $checked = false;
+?>
+	<?php _e("Ask for permission:", 'sell-from-blog'); ?> <input type="checkbox" name="<?php echo $data_field7_name; ?>" <?php if($checked) echo 'checked="checked"'; ?>></textarea>
+</p>
+
 <p class="submit">
 <input type="submit" name="Submit" class="button-primary" value="<?php _e("Save", 'sell-from-blog'); ?>" />
 </p>
@@ -332,6 +366,7 @@ function sellfromblog_activation() {
 	  IP varchar(128) NULL,
 	  email varchar(128) NULL,
 	  transaction_date int(64) NULL,
+	  agree varchar(8) NULL,
 	  UNIQUE KEY id (id)
 	);";
 	
@@ -361,13 +396,14 @@ function sellfromblog_dashboard() {
 	
 	echo "<p>" . __("Number of active (unused codes)", "sell-from-blog") . ": $number_of_codes</p>";
 	
-	$last_transactions = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "sellfromblog_codes WHERE transaction_date IS NOT NULL ORDER BY transaction_date DESC LIMIT 0, 25", ARRAY_A);
+	$last_transactions = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "sellfromblog_codes WHERE transaction_date IS NOT NULL ORDER BY transaction_date DESC LIMIT 0, 15", ARRAY_A);
 	
 	echo "<h4>" . __("Recent Sales", "sell-from-blog") . "</h4>";
 	//var_dump($last_transactions);
 	
 	?>
 	<style type="text/css">
+		.sellfromblog_table { font-size: 9px; }
 		.sellfromblog_table th { font-weight: bold; }
 		.sellfromblog_table { border-collapse: collapse; }
 		.sellfromblog_table td, .sellfromblog_table th { border: 1px solid #ddd; padding: 4px;}
@@ -378,15 +414,23 @@ function sellfromblog_dashboard() {
 	echo "<th>". __("Date", "sell-from-blog") . "</td>";
 	echo "<th>". __("Code", "sell-from-blog") . "</td>";
 	echo "<th>". __("Email", "sell-from-blog") . "</td>";
+	if(get_option("sellfromblog_agree_ask") == "on") {
+		echo "<th>". __("Agree", "sell-from-blog") . "</td>";
+	}
 	echo "<th>". __("IP", "sell-from-blog") . "</td>";
 	echo "</tr>";
 	
 	
 	foreach($last_transactions as $transaction) {
+		$agr = $transaction['agree'] ? __("yes", "sell-from-blog") : __("no", "sell-from-blog");
+		
 		echo "<tr>";
-		echo "<td>". date('r', $transaction['transaction_date']) . "</td>";
+		echo "<td>". date_i18n('j M Y G:i:s', $transaction['transaction_date']) . "</td>";
 		echo "<td>". $transaction['Code'] . "</td>";
-		echo "<td>". $transaction['email'] . "</td>";
+		echo "<td>". preg_replace("/@/", "@<br />", $transaction['email']) . "</td>";
+		if(get_option("sellfromblog_agree_ask") == "on") {
+			echo "<td>" . $agr . "</td>";
+		}
 		echo "<td>". $transaction['IP'] . "</td>";
 		echo "</tr>";
 	}
