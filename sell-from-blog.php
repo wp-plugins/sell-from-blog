@@ -61,7 +61,7 @@ function get_sellfromblog_form($email, $kod, $agree = "on") {
 		$sellfromblog_shortcode .= '</table>';
 		$sellfromblog_shortcode .= '</div>';
 	} else {
-		$sellfromblog_shortcode .= __('<p><strong style="color: #ff0000;">' . __("Unfortunately, the sales form has been temporarily disabled due to a shortage of codes in the database. The admin should replenish it shortly and the form will be available again.", "sell-from-blog") . '</strong></p>', "sell-from-blog");
+		$sellfromblog_shortcode .= '<p><strong style="color: #ff0000;">' . __("Unfortunately, the sales form has been temporarily disabled due to a shortage of codes in the database. The admin should replenish it shortly and the form will be available again.", "sell-from-blog") . '</strong></p>', "sell-from-blog");
 	}
 	
 	return $sellfromblog_shortcode;

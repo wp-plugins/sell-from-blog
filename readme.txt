@@ -1,10 +1,10 @@
 === Sell from Blog ===
 Contributors: paulpela
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XC8GDD4EMJK98
-Tags: sell, ebook, premium, sms, paid content, payments
+Tags: sell, ebook, premium, sms, paid content, payments, marketing, sales, text message, micropayments
 Requires at least: 3.0
 Tested up to: 3.0.1
-Stable tag: 0.88
+Stable tag: 0.89
 
 Sell from Blog lets you sell your ebook or software package via premium SMS payments.
 
@@ -19,6 +19,8 @@ The buyer obtains a code through premium sms service and enters it along with hi
 The package you want to sell is placed on your own server, in a secured directory which is not accessible from outside.
 
 There is also a dashboard widget which shows you how many codes you have left and gives detailed info on last 25 transactions.
+
+Additionally, you can ask buyers to let you send additional information to their email address (can be turned on of off in the admin section).
 
 
 == Installation ==
@@ -90,7 +92,7 @@ This plugin is gettext-ready. You can easily translate it into your language.
 == Changelog ==
 
 = 0.89 =
-* You can now ask people to let you use their email address in marketing purposes
+* You can now ask people to let you use their email address for marketing purposes
 * If you run out of codes the form will temporarily shut down until you replenish them
 
 = 0.88 =
