@@ -61,7 +61,7 @@ function get_sellfromblog_form($email, $kod, $agree = "on") {
 		$sellfromblog_shortcode .= '</table>';
 		$sellfromblog_shortcode .= '</div>';
 	} else {
-		$sellfromblog_shortcode .= '<p><strong style="color: #ff0000;">' . __("Unfortunately, the sales form has been temporarily disabled due to a shortage of codes in the database. The admin should replenish it shortly and the form will be available again.", "sell-from-blog") . '</strong></p>', "sell-from-blog");
+		$sellfromblog_shortcode .= '<p><strong style="color: #ff0000;">' . __("Unfortunately, the sales form has been temporarily disabled due to a shortage of codes in the database. The admin should replenish it shortly and the form will be available again.", "sell-from-blog"). '</strong></p>';
 	}
 	
 	return $sellfromblog_shortcode;
@@ -276,11 +276,17 @@ function sellfromblog_plugin_options() {
 	$all_codes = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . "sellfromblog_codes WHERE active = 1", ARRAY_A);
 	$number_of_codes = $wpdb->num_rows;
 	
+	$length = 9;
 	if($number_of_codes > 0) {
 		foreach($all_codes as $code) {
 			$codes_arr[] = $code['Code'];
+			if(count($codes_arr) == $length) {
+				$codes_arr2[] = join(",", $codes_arr);
+				unset($codes_arr);
+				$length = 12;
+			}
 		}
-		$active_codes = join(",", $codes_arr);
+		$active_codes = join("<br/>", $codes_arr2);
 	} else {
 		$active_codes = "";
 	}
