@@ -3,14 +3,12 @@ Contributors: paulpela
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XC8GDD4EMJK98
 Tags: sell, ebook, premium, sms, paid content, payments, marketing, sales, text message, micropayments
 Requires at least: 3.0
-Tested up to: 3.0.1
-Stable tag: 0.89
+Tested up to: 3.2.1
+Stable tag: 0.90
 
 Sell from Blog lets you sell your ebook or software package via premium SMS payments.
 
 == Description ==
-
-Opis w języku polskim: http://www.blogworkorange.net/sell-from-blog/
 
 This plugin lets you sell your ebook, software package or anything else small enough to fit into a standard email message (less than 10MiB is safe).
 
@@ -91,6 +89,9 @@ This plugin is gettext-ready. You can easily translate it into your language.
 
 == Changelog ==
 
+= 0.90 =
+* Replaced mime_content_type for PHP 5.3+
+
 = 0.89 =
 * You can now ask people to let you use their email address for marketing purposes
 * If you run out of codes the form will temporarily shut down until you replenish them
@@ -126,6 +127,9 @@ This plugin is gettext-ready. You can easily translate it into your language.
 * First public release.
 
 == Upgrade Notice ==
+
+= 0.90 =
+* Replaced mime_content_type for PHP 5.3+
 
 = 0.89 =
 * Form shuts down if you run out of codes. You can ask buyers for permission to use their email for marketing
